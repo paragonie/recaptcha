@@ -1,8 +1,8 @@
 {
-    "name": "google/recaptcha",
-    "description": "Client library for reCAPTCHA, a free service that protect websites from spam and abuse.",
+    "name": "paragonie/recaptcha",
+    "description": "A fork of Google's PHP ReCAPTCHA Client with Proxy support.",
     "type": "library",
-    "keywords": ["recaptcha", "captcha", "spam", "abuse"],
+    "keywords": ["recaptcha", "captcha", "spam", "abuse", "proxy"],
     "homepage": "http://www.google.com/recaptcha/",
     "license": "BSD-3-Clause",
     "support": {
