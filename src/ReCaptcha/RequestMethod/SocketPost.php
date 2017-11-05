@@ -70,11 +70,11 @@ class SocketPost implements RequestMethod
      */
     public function __construct(Socket $socket = null)
     {
-        if (!is_null($socket)) {
-            $this->socket = $socket;
-        } else {
-            $this->socket = new Socket();
+        /** @var Socket $socket */
+        if (\is_null($socket)) {
+            $socket = new Socket();
         }
+        $this->socket = $socket;
     }
 
     /**
@@ -88,8 +88,11 @@ class SocketPost implements RequestMethod
         $errno = 0;
         $errstr = '';
 
-        if (false === $this->socket->fsockopen('ssl://' . self::RECAPTCHA_HOST, 443, $errno, $errstr, 30)) {
-            return self::BAD_REQUEST;
+        $res = $this->socket->fsockopen('ssl://' . self::RECAPTCHA_HOST, 443, $errno, $errstr, 30);
+        if (!\is_resource($res)) {
+            if ($res === false) {
+                return self::BAD_REQUEST;
+            }
         }
 
         $content = $params->toQueryString();

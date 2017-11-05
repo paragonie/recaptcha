@@ -32,6 +32,9 @@ namespace ReCaptcha\RequestMethod;
  */
 class Socket
 {
+    /**
+     * @var resource
+     */
     private $handle = null;
 
     /**
@@ -43,11 +46,21 @@ class Socket
      * @param int $errno
      * @param string $errstr
      * @param float $timeout
-     * @return resource
+     * @return resource|bool
      */
     public function fsockopen($hostname, $port = -1, &$errno = 0, &$errstr = '', $timeout = null)
     {
-        $this->handle = fsockopen($hostname, $port, $errno, $errstr, (is_null($timeout) ? ini_get("default_socket_timeout") : $timeout));
+        $this->handle = fsockopen(
+            $hostname,
+            $port,
+            $errno,
+            $errstr,
+            (
+                \is_null($timeout)
+                    ? (int) ini_get("default_socket_timeout")
+                    : $timeout
+            )
+        );
 
         if ($this->handle != false && $errno === 0 && $errstr === '') {
             return $this->handle;
@@ -61,10 +74,13 @@ class Socket
      * @see http://php.net/fwrite
      * @param string $string
      * @param int $length
-     * @return int | bool
+     * @return int|bool
      */
     public function fwrite($string, $length = null)
     {
+        if (!\is_resource($this->handle)) {
+            throw new \RuntimeException('Handle not opened');
+        }
         return fwrite($this->handle, $string, (is_null($length) ? strlen($string) : $length));
     }
 
@@ -77,7 +93,15 @@ class Socket
      */
     public function fgets($length = null)
     {
-        return fgets($this->handle, $length);
+        if (!\is_resource($this->handle)) {
+            throw new \RuntimeException('Handle not opened');
+        }
+        /** @var int $length */
+        $result = fgets($this->handle, $length);
+        if (!\is_string($result)) {
+            throw new \RuntimeException('Could not read from socket');
+        }
+        return $result;
     }
 
     /**
@@ -88,6 +112,9 @@ class Socket
      */
     public function feof()
     {
+        if (!\is_resource($this->handle)) {
+            throw new \RuntimeException('Handle not opened');
+        }
         return feof($this->handle);
     }
 
@@ -99,6 +126,9 @@ class Socket
      */
     public function fclose()
     {
+        if (!\is_resource($this->handle)) {
+            throw new \RuntimeException('Handle not opened');
+        }
         return fclose($this->handle);
     }
 }

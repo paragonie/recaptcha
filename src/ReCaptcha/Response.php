@@ -83,7 +83,7 @@ class Response
      * @param array $errorCodes
      * @param string $hostname
      */
-    public function __construct($success, array $errorCodes = array(), $hostname = null)
+    public function __construct($success, array $errorCodes = array(), $hostname = '')
     {
         $this->success = $success;
         $this->errorCodes = $errorCodes;

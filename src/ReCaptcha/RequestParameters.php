@@ -63,7 +63,7 @@ class RequestParameters
      * @param string $remoteIp User's IP address.
      * @param string $version Version of this client library.
      */
-    public function __construct($secret, $response, $remoteIp = null, $version = null)
+    public function __construct($secret, $response, $remoteIp = '', $version = '')
     {
         $this->secret = $secret;
         $this->response = $response;

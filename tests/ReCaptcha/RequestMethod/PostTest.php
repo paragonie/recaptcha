@@ -31,6 +31,7 @@ use ReCaptcha\RequestParameters;
 class PostTest extends \PHPUnit_Framework_TestCase
 {
     public static $assert = null;
+    /** @var RequestParameters */
     protected $parameters = null;
     protected $runcount = 0;
 

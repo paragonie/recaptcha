@@ -45,6 +45,7 @@ class Post implements RequestMethod
      *
      * @param RequestParameters $params Request parameters
      * @return string Body of the reCAPTCHA response
+     * @throws \InvalidArgumentException
      */
     public function submit(RequestParameters $params)
     {
@@ -64,7 +65,11 @@ class Post implements RequestMethod
                 $peer_key => 'www.google.com',
             ),
         );
-        $context = stream_context_create($options);
-        return file_get_contents(self::SITE_VERIFY_URL, false, $context);
+        $context = \stream_context_create($options);
+        $contents = file_get_contents(self::SITE_VERIFY_URL, false, $context);
+        if (!\is_string($contents)) {
+            return '';
+        }
+        return $contents;
     }
 }

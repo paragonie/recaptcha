@@ -68,11 +68,15 @@ class ReCaptcha
 
         $this->secret = $secret;
 
-        if (!is_null($requestMethod)) {
-            $this->requestMethod = $requestMethod;
-        } else {
-            $this->requestMethod = new RequestMethod\Post();
+        if (\is_null($requestMethod)) {
+            /** @var RequestMethod $requestMethod */
+            $requestMethod = new RequestMethod\Post();
         }
+        if (!($requestMethod instanceof RequestMethod)) {
+            throw new \RuntimeException('Invalid type');
+        }
+        /** @var RequestMethod $this->requestMethod */
+        $this->requestMethod = $requestMethod;
     }
 
     /**
@@ -83,7 +87,7 @@ class ReCaptcha
      * @param string $remoteIp The end user's IP address.
      * @return Response Response from the service.
      */
-    public function verify($response, $remoteIp = null)
+    public function verify($response, $remoteIp = '')
     {
         // Discard empty solution submissions
         if (empty($response)) {

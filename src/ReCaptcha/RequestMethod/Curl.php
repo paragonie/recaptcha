@@ -36,10 +36,15 @@ class Curl
      * @see http://php.net/curl_init
      * @param string $url
      * @return resource cURL handle
+     * @throws \RuntimeException
      */
-    public function init($url = null)
+    public function init($url = '')
     {
-        return curl_init($url);
+        $ch = curl_init($url);
+        if (!\is_resource($ch)) {
+            throw new \RuntimeException('An unknown error has occurred');
+        }
+        return $ch;
     }
 
     /**
@@ -50,7 +55,7 @@ class Curl
      */
     public function setoptArray($ch, array $options)
     {
-        return curl_setopt_array($ch, $options);
+        return \curl_setopt_array($ch, $options);
     }
 
     /**
@@ -60,15 +65,16 @@ class Curl
      */
     public function exec($ch)
     {
-        return curl_exec($ch);
+        return \curl_exec($ch);
     }
 
     /**
      * @see http://php.net/curl_close
      * @param resource $ch
+     * @return void
      */
     public function close($ch)
     {
-        curl_close($ch);
+        \curl_close($ch);
     }
 }
