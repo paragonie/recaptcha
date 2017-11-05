@@ -47,13 +47,13 @@ documentation.
 To add this dependency using the command, run the following from within your
 project directory:
 ```
-composer require google/recaptcha "~1.1"
+composer require paragonie/recaptcha "~2.1"
 ```
 
 Alternatively, add the dependency directly to your `composer.json` file:
 ```json
 "require": {
-    "google/recaptcha": "~1.1"
+    "paragonie/recaptcha": "~2.1"
 }
 ```
 
