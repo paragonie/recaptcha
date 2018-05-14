@@ -107,6 +107,45 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($args[1]);
         $this->assertTrue(is_resource($args[2]), "The context options should be a resource");
     }
+
+    public function httpContextWithGivenOptionsCallback(array $args)
+    {
+        $this->httpContextOptionsCallback($args);
+        $options = stream_context_get_options($args[2]);
+        $headers = array(
+            "X-Header-Test: a test",
+        );
+        foreach ($headers as $header) {
+            $this->assertContains($header, $options['http']['header']);
+        }
+
+        $this->assertArrayHasKey('ssl', $options);
+        $this->assertArrayHasKey('verify_peer_name', $options['ssl']);
+        $this->assertEquals(true, $options['ssl']['verify_peer_name']);
+
+        $this->assertArrayHasKey('proxy', $options['http']);
+    }
+
+    public function testHTTPContextWithGivenOptions()
+    {
+        $options = array(
+            'http' => array(
+                // test append option
+                'proxy' => 'tcp://proxy.example.com:5100',
+                // test replace option
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n".
+                            "X-Header-Test: a test\r\n",
+            ),
+            // test new option
+            'ssl' => array(
+                'verify_peer_name' => true,
+            ),
+        );
+        $req = new Post($options);
+        self::$assert = array($this, "httpContextWithGivenOptionsCallback");
+        $req->submit($this->parameters);
+        $this->assertEquals(1, $this->runcount, "The assertion was ran");
+    }
 }
 
 function file_get_contents()

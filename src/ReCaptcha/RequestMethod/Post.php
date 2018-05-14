@@ -39,6 +39,15 @@ class Post implements RequestMethod
      * @const string
      */
     const SITE_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+    /**
+     * @var array
+     */
+    private $options = array();
+
+    public function __construct(array $options = array())
+    {
+        $this->options = $options;
+    }
 
     /**
      * Submit the POST request with the specified parameters.
@@ -65,11 +74,31 @@ class Post implements RequestMethod
                 $peer_key => 'www.google.com',
             ),
         );
+        $options = self::mergeOptions($options, $this->options);
         $context = \stream_context_create($options);
         $contents = file_get_contents(self::SITE_VERIFY_URL, false, $context);
         if (!\is_string($contents)) {
             return '';
         }
         return $contents;
+    }
+
+    /**
+     * Recursively merge options without appending values.
+     *
+     * @param  array  $arr1 Options array (the default options)
+     * @param  array  $arr2 Options array (the given options)
+     * @return array        The merged options
+     */
+    private static function mergeOptions(array $arr1, array $arr2)
+    {
+        foreach ($arr2 as $key => $val) {
+            $arr1[$key] = (
+                is_array($val) && isset($arr1[$key]) && is_array($arr1[$key])
+                ? self::mergeOptions($arr1[$key], $val) : $val
+            );
+        }
+
+        return $arr1;
     }
 }
