@@ -84,7 +84,7 @@ class Response
         $responseData = json_decode($json, true);
 
         if (!$responseData) {
-            return new Response(false, array(ReCaptcha::E_INVALID_JSON));
+            return new Response(false, array('invalid-json'));
         }
 
         $hostname = isset($responseData['hostname']) ? $responseData['hostname'] : null;
@@ -101,7 +101,7 @@ class Response
             return new Response(false, $responseData['error-codes'], $hostname, $challengeTs, $apkPackageName, $score, $action);
         }
 
-        return new Response(false, array(ReCaptcha::E_UNKNOWN_ERROR), $hostname, $challengeTs, $apkPackageName, $score, $action);
+        return new Response(false, array('unknown-error'), $hostname, $challengeTs, $apkPackageName, $score, $action);
     }
 
     /**
