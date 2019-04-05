@@ -77,15 +77,15 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 '{"success": false}',
-                false, array(ReCaptcha::E_UNKNOWN_ERROR), null, null, null, null, null,
+                false, array('unknown-error'), null, null, null, null, null,
             ),
             array(
                 '{"success": false, "hostname": "google.com"}',
-                false, array(ReCaptcha::E_UNKNOWN_ERROR), 'google.com', null, null, null, null,
+                false, array('unknown-error'), 'google.com', null, null, null, null,
             ),
             array(
                 'BAD JSON',
-                false, array(ReCaptcha::E_INVALID_JSON), null, null, null, null, null,
+                false, array('invalid-json'), null, null, null, null, null,
             ),
         );
     }
