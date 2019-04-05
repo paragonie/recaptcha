@@ -45,31 +45,31 @@ class Response
 
     /**
      * The hostname of the site where the reCAPTCHA was solved.
-     * @var string
+     * @var string|null
      */
     private $hostname;
 
     /**
      * Timestamp of the challenge load (ISO format yyyy-MM-dd'T'HH:mm:ssZZ)
-     * @var string
+     * @var string|null
      */
     private $challengeTs;
 
     /**
      * APK package name
-     * @var string
+     * @var string|null
      */
     private $apkPackageName;
 
     /**
      * Score assigned to the request
-     * @var float
+     * @var float|null
      */
     private $score;
 
     /**
      * Action as specified by the page
-     * @var string
+     * @var string|null
      */
     private $action;
 
@@ -112,7 +112,7 @@ class Response
      * @param string $challengeTs
      * @param string $apkPackageName
      * @param float $score
-     * @param strong $action
+     * @param string $action
      * @param array $errorCodes
      */
     public function __construct($success, array $errorCodes = array(), $hostname = null, $challengeTs = null, $apkPackageName = null, $score = null, $action = null)
@@ -149,7 +149,7 @@ class Response
     /**
      * Get hostname.
      *
-     * @return string
+     * @return string|null
      */
     public function getHostname()
     {
@@ -159,7 +159,7 @@ class Response
     /**
      * Get challenge timestamp
      *
-     * @return string
+     * @return string|null
      */
     public function getChallengeTs()
     {
@@ -169,7 +169,7 @@ class Response
     /**
      * Get APK package name
      *
-     * @return string
+     * @return string|null
      */
     public function getApkPackageName()
     {
@@ -178,7 +178,7 @@ class Response
     /**
      * Get score
      *
-     * @return float
+     * @return float|null
      */
     public function getScore()
     {
@@ -188,13 +188,18 @@ class Response
     /**
      * Get action
      *
-     * @return string
+     * @return string|null
      */
     public function getAction()
     {
         return $this->action;
     }
 
+    /**
+     * To array
+     *
+     * @return array
+     */
     public function toArray()
     {
         return array(
